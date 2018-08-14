@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
 """
-A simple script that uses
+This script uses the 
 'http://geoiplookup.net' api to get 
-basic geo location information
-for a given ip
-
-Created: 07/04/2016
-Python 3.x
-Orginally written with qpython(3.2.2) for
-Android.(Kit-kat)
+basic geo location data
+for a given ip.
 """
 from bs4 import BeautifulSoup as bs
-import ipaddress as ip #available Standard Lib in 3.3 or later
+import ipaddress as ip #available in StdLib, 3.3 or later
 import os
 import requests as req 
 import socket
@@ -22,8 +17,13 @@ from urllib.parse import urlparse
 class Application():
     def __init__(self,master):
         """
-        defines a gui window
+        Defines a gui window
         and its widgets.
+        
+        Attributes
+        ----------
+        master(Tk root window):
+            The tkinter root window object
         """
         #==========================Basic Window Config and Xml Tags======================================
         self.master = master #tk root window
@@ -33,21 +33,20 @@ class Application():
         self.master.bind('<Return>',self.main)
         self.master.bind('<Escape>',lambda e: self.master.destroy())
         self.master.bind('<Delete>',self.clear_entry)
-        self.tags = ['longitude', 'latitude', 'countryname', 
-                     'countrycode', 'city', 'isp', 'host'] 
-        self.headers = {'User-Agent':'Py-Geo Ip Tool'}
+        self.tags = ('longitude', 'latitude', 'countryname', 
+                     'countrycode', 'city', 'isp', 'host') 
+        self.headers = {'User-Agent':'Py-Geo'}
         #===========================Font, Image Files, and StringVar====================================
-        self.about_image = tk.PhotoImage(file='images/bg.png')
-        self.logo_image = tk.PhotoImage(file='images/globe.png')
+        self.bg_image = tk.PhotoImage(file='images/bg.png')
         self.label_font = tkfont.Font(size=12, weight='bold', slant='italic')
         self.title_font = tkfont.Font(size=23, weight='bold', slant='italic', underline=1)   
         self.entry_var = tk.StringVar()  
-        #====================================Labels=====================================================
-        self.about_image_label = tk.Label(self.master,image=self.about_image)
-        self.about_image_label.pack(fill= 'both')
-        self.entry_label = tk.LabelFrame(self.master, text='Enter Ip or URL>>>', fg='white', bg='#4e4e4e')
+        #====================================Labels=================================================s====
+        self.bg_image_label = tk.Label(self.master, image=self.bg_image)
+        self.bg_image_label.pack(fill= 'both')
+        self.entry_label = tk.LabelFrame(self.master, text='Enter Ip or URL>>>', fg='white', bg='#201e27')
         self.entry_label.place(x=0, y =220)
-        self.geo_info_label = tk.LabelFrame(self.master, text='Geo Location Info', bg='#4e4e4e',
+        self.geo_info_label = tk.LabelFrame(self.master, text='Location Data', bg='#4e4e4e',
                                             fg='white', labelanchor='n', height=290, width=289, font=self.label_font)
         self.geo_info_label.place(x= 250, y=0)
         #==================================Entry Widget=================================================
@@ -55,17 +54,17 @@ class Application():
         self.entry_bar.pack()
         self.entry_bar.focus()
         #===================================Buttons=====================================================
-        self.go_button = tk.Button(self.master, bg='#4e4e4e', fg='white', text='Go!', command=self.main)  
+        self.go_button = tk.Button(self.master, bg='#201e27', fg='white', text='Go!', command=self.main)  
         self.go_button.place(x=180, y=230)
-        self.clear_button = tk.Button(self.master, bg='#4e4e4e', fg='white', text='Clear!', command=self.clear_entry)
+        self.clear_button = tk.Button(self.master, bg='#201e27', fg='white', text='Clear!', command=self.clear_entry)
         self.clear_button.place(x=173, y=265)
         #==================================Text Box=====================================================
-        self.hud = tk.Text(self.geo_info_label, bg='#c9c9c9', width=40)
+        self.hud = tk.Text(self.geo_info_label, bg='#33303f', fg='white', width=40)
         self.hud.place(x=0, y=0)
     
     def display(self,tags):   
         """
-        Displays Geo location information to
+        Displays location information to
         text widget(self.hud)
 
         Parameters:
@@ -73,9 +72,9 @@ class Application():
         tags(list):
             List of tuple pairs to interate over.
         
-        Return:
+        Returns:
         -------
-        Output(None)
+        Output:(None)
         """
         for k,v in tags:
             entry = "".join([k.title(),':',v,'\n','\n'])
@@ -84,28 +83,20 @@ class Application():
                
     def clear_entry(self,*args):
         """
-        Clears entry widget
-
-        Paramaters:
-        -----------
-        None        
-
-        Return:
+        Clears entry widget.
+ 
+        Returns:
         -------
-        Output(None)
+        Output:(None)
         """
         current = len(self.entry_bar.get())
         self.entry_bar.delete(0,current)  
     
     def empty_textbox(self):
         """
-        Clears text widget
+        Clears text widget.
 
-        Paramaters:
-        -----------
-        None
-        
-        Return:
+        Returns:
         -------
         Output(None)
         """    
@@ -129,13 +120,19 @@ class Application():
         ip(string):
             The ip address to obtain the geolocation info for
         
-        Return:
+        Returns:
         -------
-        Output(list):
+        Output:(list)
             List of tuple pairs
+            
+        Exceptions:
+        -----------
+        req.exceptions.ConnectionError:
+             Raised when geoiplookup.net cannont be accessed
+             (For whatever reason).
         """
         try:
-           
+   
             api_link = 'http://api.geoiplookup.net/?query='
             ip_link = ''.join([api_link,ip])
             res = req.get(ip_link,headers= self.headers)
@@ -143,6 +140,7 @@ class Application():
             info = [xml_soup.find(i).get_text() for i in self.tags]
             pairings = list(zip(self.tags,info))
             return pairings
+            
         except req.exceptions.ConnectionError:  
             self.hud.insert('1.0','http://geoiplookup.net\nis currently unavailable.')
    
@@ -164,19 +162,18 @@ class Application():
         Displays results from get_geo function on self.hud text
         widget
 
-        Parameters:
-        ----------
-        Args*
-
         Return:
         -------
-        Output(None)
+        Output:(None)
   
         Exceptions:
         -----------
         Value Error:
             Raised if ip.ipaddress() is given a malformed ip.
            
+        AttributeError:
+            Raised when A "None" Value is recieved.
+            
         req.HTTPError: 
             Raised if something goes wrong wile trying
             to access geoiplookup.net.
@@ -197,13 +194,13 @@ class Application():
         except (ValueError,req.HTTPError):
             try:
                 if not user_entry.startswith(scheme):
-                    user_entry = ''.join((scheme[0],user_entry))
+                    user_entry = ''.join((scheme[0],user_entry))     
                 parse_results = urlparse(user_entry)
                 result = socket.gethostbyname(parse_results[1]) 
                 ip_info = self.get_geo(result)   
-                self.display(ip_info) 
-            except (ValueError,req.HTTPError,socket.gaierror):
-                self.hud.insert('1.0','Invalid!Please check your entry\nand try again.')
+                self.display(ip_info)      
+            except (ValueError, AttributeError, req.HTTPError, socket.gaierror,):
+                self.hud.insert('1.0','Invalid Entry!\nPlease check your entry\nand try again.')
                  
 if __name__ == '__main__':
      root = tk.Tk()
