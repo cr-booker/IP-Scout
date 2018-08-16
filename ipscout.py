@@ -72,13 +72,23 @@ class Application():
     def showMenu(self, e):
         """
         Displays pop up menu.
+        
+        Parameters:
+        -----------
+        e(Tk Event):
+            Tkinkter event object.
+        
+        Returns:
+        -------
+        Output:(None)
         """
+        print(type(e))
         self.menu.tk_popup(e.x_root, e.y_root)
     
     def display(self,tags):   
         """
         Displays location information to
-        text widget(self.hud)
+        text widget(self.hud).
 
         Parameters:
         -----------
