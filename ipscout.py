@@ -35,23 +35,26 @@ class Application():
         self.master.bind('<Delete>',self.clear_entry)
         self.tags = ('longitude', 'latitude', 'countryname', 
                      'countrycode', 'city', 'isp', 'host') 
-        self.headers = {'User-Agent':'Py-Geo'}
+        self.headers = {'User-Agent':'IP-scout'}
         #===========================Font, Image Files, and StringVar====================================
         self.bg_image = tk.PhotoImage(file='images/bg.png')
         self.label_font = tkfont.Font(size=12, weight='bold', slant='italic')
         self.title_font = tkfont.Font(size=23, weight='bold', slant='italic', underline=1)   
         self.entry_var = tk.StringVar()  
-        #====================================Labels=================================================s====
+        #====================================Labels======================================================
         self.bg_image_label = tk.Label(self.master, image=self.bg_image)
         self.bg_image_label.pack(fill= 'both')
+        #====================================Label Frames=================================================s====
         self.entry_label = tk.LabelFrame(self.master, text='Enter Ip or URL>>>', fg='white', bg='#201e27')
         self.entry_label.place(x=0, y =220)
         self.geo_info_label = tk.LabelFrame(self.master, text='Location Data', bg='#4e4e4e',
-                                            fg='white', labelanchor='n', height=290, width=289, font=self.label_font)
+                                            fg='white',borderwidth=2,relief='sunken', labelanchor='n', height=290, 
+                                            width=289, font=self.label_font)
         self.geo_info_label.place(x= 250, y=0)
         #==================================Entry Widget=================================================
         self.entry_bar = tk.Entry(self.entry_label, bg='#33303f',fg='white', relief='sunken', textvariable=self.entry_var)
         self.entry_bar.pack()
+        self.entry_bar.bind("<Button-3>", self.showMenu)
         self.entry_bar.focus()
         #===================================Buttons=====================================================
         self.go_button = tk.Button(self.master, bg='#201e27', fg='white', text='Go!', command=self.main)  
@@ -59,16 +62,16 @@ class Application():
         self.clear_button = tk.Button(self.master, bg='#201e27', fg='white', text='Clear!', command=self.clear_entry)
         self.clear_button.place(x=173, y=265)
         #==================================Text Box=====================================================
-        self.hud = tk.Text(self.geo_info_label, bg='#33303f', fg='white', width=40)
+        self.hud = tk.Text(self.geo_info_label, bg='#33303f', fg='white', width=40, height=19)
         self.hud.place(x=0, y=0)
+        self.hud.bind("<Button-3>", self.showMenu)
         #==================================Menu=========================================================
         self.menu = tk.Menu(self.master,bg='#33303f',fg='white', tearoff=0)
         self.menu.add_command(label="Cut", command=lambda: self.master.focus_get().event_generate("<<Cut>>")) 
         self.menu.add_command(label="Copy", command=lambda: self.master.focus_get().event_generate("<<Copy>>"))
         self.menu.add_command(label="Paste", command=lambda: self.master.focus_get().event_generate("<<Paste>>"))
         self.entry_bar.bind("<Button-3>", self.showMenu)
-        self.hud.bind("<Button-3>", self.showMenu)
-            
+        
     def showMenu(self, e):
         """
         Displays pop up menu.
@@ -82,7 +85,6 @@ class Application():
         -------
         Output:(None)
         """
-        print(type(e))
         self.menu.tk_popup(e.x_root, e.y_root)
     
     def display(self,tags):   
@@ -155,7 +157,6 @@ class Application():
              (For whatever reason).
         """
         try:
-   
             api_link = 'http://api.geoiplookup.net/?query='
             ip_link = ''.join([api_link,ip])
             res = req.get(ip_link,headers= self.headers)
