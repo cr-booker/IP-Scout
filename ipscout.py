@@ -50,7 +50,7 @@ class Application():
                                             fg='white', labelanchor='n', height=290, width=289, font=self.label_font)
         self.geo_info_label.place(x= 250, y=0)
         #==================================Entry Widget=================================================
-        self.entry_bar = tk.Entry(self.entry_label, relief='sunken', textvariable=self.entry_var)
+        self.entry_bar = tk.Entry(self.entry_label, bg='#33303f',fg='white', relief='sunken', textvariable=self.entry_var)
         self.entry_bar.pack()
         self.entry_bar.focus()
         #===================================Buttons=====================================================
@@ -61,6 +61,19 @@ class Application():
         #==================================Text Box=====================================================
         self.hud = tk.Text(self.geo_info_label, bg='#33303f', fg='white', width=40)
         self.hud.place(x=0, y=0)
+        #==================================Menu=========================================================
+        self.menu = tk.Menu(self.master,bg='#33303f',fg='white', tearoff=0)
+        self.menu.add_command(label="Cut", command=lambda: self.master.focus_get().event_generate("<<Cut>>")) 
+        self.menu.add_command(label="Copy", command=lambda: self.master.focus_get().event_generate("<<Copy>>"))
+        self.menu.add_command(label="Paste", command=lambda: self.master.focus_get().event_generate("<<Paste>>"))
+        self.entry_bar.bind("<Button-3>", self.showMenu)
+        self.hud.bind("<Button-3>", self.showMenu)
+            
+    def showMenu(self, e):
+        """
+        Displays pop up menu.
+        """
+        self.menu.tk_popup(e.x_root, e.y_root)
     
     def display(self,tags):   
         """
