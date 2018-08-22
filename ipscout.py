@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
 This module uses the 
-'http://geoiplookup.net' api to get 
-basic geo location data
+'http://geoiplookup.net'api to get 
+basic geolocation data
 for a given ip.
 """
-from bs4 import BeautifulSoup as bs
 import ipaddress as ip #available in StdLib, 3.3 or later
 import os
-import requests as req 
 import socket
 import tkinter as tk 
 import tkinter.font as tkfont
 from urllib.parse import urlparse
+
+from bs4 import BeautifulSoup as bs
+import requests as req 
 
 class Application():
     def __init__(self,master):
@@ -215,5 +216,3 @@ if __name__ == '__main__':
      root = tk.Tk()
      app = Application(root)
      tk.mainloop()
-     
-    
