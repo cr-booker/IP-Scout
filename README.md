@@ -1,3 +1,5 @@
 # IP-Scout
-A script that uses http://geoiplookup.net's api  
-to get basic geo location information for a given ip.  
+IP Scout is a simple tool that uses http://geoiplookup.net's api  
+to get geolocation data for a given IP or domain.  
+![Screenshot](images/screenshot.png)
+
