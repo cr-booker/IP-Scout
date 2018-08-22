@@ -91,7 +91,7 @@ class Application():
     
     def display(self,tags):   
         """
-        Displays location information to
+        Displays data on the
         text widget(self.hud).
 
         Parameters:
@@ -133,14 +133,8 @@ class Application():
       
     def get_geo(self,ip):
         """
-        Parses xml using bs4 to get
-        geo information on given ip.
-           
-        uses requests module to access 
-        geoiplookup.net. joins api url with ip argument,
-        creates a tuple of  all tags in xml file,then uses a 
-        list comprehension to iterate over the tags and 
-        extract the text within.
+        Sends a request and Parses the returned xml 
+        using bs4.
            
         Parameters:
         ----------
@@ -172,22 +166,11 @@ class Application():
    
     def main(self,*args):
         """
-        Main function that gets user input
-        calls get_geo and displays results
-           
-        Waits for user input,expects a properly formatted url or 
-        ip address, will raise a Value or socket.gai Error otherwise.
-           
-        Enters the try block where the function 
-        adds 'http://' to front of user string
-        if it was not already present.  
-        calls urlparse to split the newly concactanated string 
-        into a tuple, where we take the second entry, the 'netloc',
-        and plug it into the socket.gethostbyname() function.
-     
-        Displays results from get_geo function on self.hud text
-        widget
-
+        Main function. 
+        
+        Gets user input from entry widget,
+        calls the get_geo and displays results.
+             
         Return:
         -------
         Output:(None)
