@@ -49,7 +49,7 @@ class Application():
         self.bg_image_label = tk.Label(self.master, image=self.bg_image)
         self.bg_image_label.pack(fill= 'both')
         #====================================Label Frames=====================================================
-        self.entry_label = tk.LabelFrame(self.master, text='Enter Ip or URL>>>', fg='white', bg='#201e27')
+        self.entry_label = tk.LabelFrame(self.master, text='Enter Domain or IP>>>', fg='white', bg='#201e27')
         self.entry_label.place(x=0, y =220)
         self.geo_info_label = tk.LabelFrame(self.master, text='Location Data', bg='#4e4e4e',
                                             fg='white',borderwidth=1,relief='sunken', labelanchor='n',font=self.label_font)
